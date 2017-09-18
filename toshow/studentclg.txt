@@ -1,0 +1,7 @@
+1,yutika,ced,31031997
+2,apurva,coe,30031997
+3,richa,mdm,31051997
+4,kalyani,mfd,07091978
+5,chandrashekhar,civil,15041970
+6,vedant,ced,20101997
+7,hritik,mpd,15021987

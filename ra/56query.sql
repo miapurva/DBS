@@ -1,0 +1,410 @@
+/*QUERY 1*/
+select FIRSTNAME,LASTNAME from EMPLOYEE where mod(SSN,2)=0;
+
+/*QUERY 2*/
+SELECT FIRSTNAME,LASTNAME FROM EMPLOYEE WHERE MOD(SSN,2)=1;
+
+/*QUERY 3*/
+SELECT EXTRACT(YEAR FROM BIRTHDATE) AS year, FIRSTNAME,LASTNAME FROM EMPLOYEE;
+/*WAY 2*/
+SELECT
+  FIRSTNAME,
+  MIDDLENAME,
+  LASTNAME,
+  year(BIRTHDATE) AS BirthYear
+FROM EMPLOYEE
+ORDER BY BirthYear;
+
+/*QUERY 4*/
+SELECT LEFT(BIRTHDATE,4) FROM EMPLOYEE;
+
+/*QUERY 5*/
+SELECT LEFT(FIRSTNAME,3) FROM EMPLOYEE;
+
+/*QUERY 6*/
+SELECT
+  BIRTHDATE,
+  IF(DATE_FORMAT(BIRTHDATE, '%y-%m-%d'),
+     'IS OF FORMAT YYYY-MM-DD', IF(DATE_FORMAT(BIRTHDATE, '%m-%d-%y'),
+                                   'IS OF FORMAT MM-DD-YYYY', IF(DATE_FORMAT(BIRTHDATE, '%d-%m-%y'),
+                                                                 'IS OF FORMAT DD-MM-YYYY', 'NOT A DATE FORMAT'))) AS DATE_CHECK
+FROM EMPLOYEE;
+
+/*query 7*/
+CREATE TABLE COPYEMP (
+  Fname     VARCHAR(20),
+  Minit     CHAR,
+  Lname     VARCHAR(20),
+  Ssn       INTEGER,
+  Bdate     DATE,
+  Address   VARCHAR(40),
+  Sex       CHAR,
+  Salary    INTEGER,
+  Super_ssn INTEGER,
+  Dno       INTEGER
+);
+INSERT INTO
+COPYEMP VALUES
+  ('John','B','Smith',123456789,'1965-01-09','731 Fondren, Houston, TX','M',30000,333445555,5),
+  ('Franklin','T','Wong',333445555,'1955-12-08','638 Voss, Houston, TX','M',40000,888665555,5),
+  ('Franklin','T','Wong',333445555,'1955-12-08','638 Voss, Houston, TX','M',40000,888665555,5),
+  ('Joyce','A','English',453453453,'1972-07-31','5631 Rice, Houston, TX','F',25000,333445555,5),
+  ('Ramesh','K','Narayan',666884444,'1962-09-15','975 Fire Oak, Humble, TX','M',38000,333445555,5),
+  ('James','E','Borg',888665555,'1937-11-10','450 Stone, Houston, TX','M',55000,NULL,1),
+  ('John','B','Smith',123456789,'1965-01-09','731 Fondren, Houston, TX','M',30000,333445555,5),
+  ('James','E','Borg',888665555,'1937-11-10','450 Stone, Houston, TX','M',55000,NULL,1),
+  ('Ahmad','V','Jabbar',987987987,'1969-03-29','980 Dallas, Houston, TX','M',25000,987654321,4),
+  ('Franklin','T','Wong',333445555,'1955-12-08','638 Voss, Houston, TX','M',40000,888665555,5),
+  ('Alicia','J','Zelaya',999887777,'1968-01-19','3321 Castle, Spring, TX','F',25000,987654321,4);
+
+SELECT *,COUNT(*) AS "Number of Copies"
+FROM COPYEMP
+GROUP BY Ssn, Fname, Minit, Lname, Bdate, Address, Sex, Salary, Super_ssn, Dno
+HAVING COUNT(*) > 1;
+
+
+/*query 8*/
+SELECT *FROM COPYEMP;
+DELETE FROM COPYEMP
+WHERE Ssn IN (SELECT *
+              FROM (SELECT Ssn
+                    FROM COPYEMP
+                    GROUP BY Fname, Minit, Lname, Ssn, Bdate, Address, Sex, Salary, Super_ssn, Dno
+                    HAVING (COUNT(*) > 1)) AS A);
+SELECT  * FROM COPYEMP;
+
+/*QUERY 9*/
+DELETE FROM COPYEMP;
+INSERT INTO
+COPYEMP VALUES
+  ('John','B','Smith',123456789,'1965-01-09','731 Fondren, Houston, TX','M',30000,333445555,5),
+  ('Franklin','T','Wong',333445555,'1955-12-08','638 Voss, Houston, TX','M',40000,888665555,5),
+  ('Joyce','A','English',453453453,'1972-07-31','5631 Rice, Houston, TX','F',25000,333445555,5),
+  ('Ramesh','K','Narayan',666884444,'1962-09-15','975 Fire Oak, Humble, TX','M',38000,333445555,5),
+  ('James','E','Borg',888665555,'1937-11-10','450 Stone, Houston, TX','M',55000,NULL,1),
+  ('John','B','Smith',123456789,'1965-01-09','731 Fondren, Houston, TX','M',30000,333445555,5),
+  ('James','E','Borg',888665555,'1937-11-10','450 Stone, Houston, TX','M',55000,NULL,1),
+  ('Ahmad','V','Jabbar',987987987,'1969-03-29','980 Dallas, Houston, TX','M',25000,987654321,4),
+  ('Franklin','T','Wong',333445555,'1955-12-08','638 Voss, Houston, TX','M',40000,888665555,5),
+  ('Alicia','J','Zelaya',999887777,'1968-01-19','3321 Castle, Spring, TX','F',25000,987654321,4);
+SELECT * FROM COPYEMP;
+# Creating Temporary Table from only the distinct records in the original table
+CREATE TABLE TTABLE AS SELECT DISTINCT *
+                       FROM COPYEMP;
+# Dropping Original Table
+DROP TABLE COPYEMP;
+# Renaming Temporary Table with Original Table Name ( Replacing )
+RENAME TABLE
+    TTABLE TO COPYEMP;
+# Again Displaying the entire table before to check the query
+SELECT * FROM COPYEMP;
+/*QUERY 10*/
+SELECT E.*
+FROM EMPLOYEE E
+WHERE (SELECT COUNT(*)
+       FROM EMPLOYEE D
+       WHERE D.SALARY > E.SALARY) = 2;
+
+/*QUERY 11*/
+SELECT *
+FROM EMPLOYEE
+ORDER BY SALARY DESC
+LIMIT 3;
+
+/*QUERY 12*/
+SELECT
+  table_schema                                  "Data Base Name",
+  sum(data_length + index_length) / 1024 / 1024 "Data Base Size in MB"
+FROM information_schema.TABLES
+GROUP BY table_schema;
+
+/*QUERY 13*/
+SELECT
+  BIRTHDATE,
+  YEAR(BIRTHDATE)  Year,
+  MONTH(BIRTHDATE) Month,
+  DAY(BIRTHDATE)   Day
+FROM EMPLOYEE;
+
+/*QUERY 14*/
+SELECT CURRENT_TIME();
+
+/*QUERY 15*/
+SELECT TIME_FORMAT(CURRENT_TIME(),'%l:%i:%s %p');
+
+/*query 16*/
+SELECT
+  BIRTHDATE,
+  (BIRTHDATE + INTERVAL 1 DAY) Next_Day
+FROM EMPLOYEE;
+
+/*query 17*/
+SELECT
+  FIRSTNAME,
+  POSITION('a' IN FIRSTNAME) "POSITION OF First a IN NAME"
+FROM EMPLOYEE;
+
+/*QUERY 18*/
+SELECT LTRIM(FIRSTNAME)
+FROM EMPLOYEE;
+
+/*QUERY 19*/
+SELECT
+  FIRSTNAME,
+  LENGTH(FIRSTNAME)
+FROM EMPLOYEE;
+
+/*QUERY 20*/
+SELECT REPLACE(FIRSTNAME, 'O', '*')
+FROM EMPLOYEE;
+
+/*QUERY 21*/
+SELECT CONCAT(FIRSTNAME, '_', LASTNAME)
+FROM EMPLOYEE;
+
+/*QUERY 22*/
+SELECT *
+FROM EMPLOYEE
+WHERE CONCAT(SSN, FIRSTNAME, MIDDLENAME, LASTNAME, GENDER, SALARY, MOBILE_NO,DEPT_NO, ADDRESS, SUPERSSN, BIRTHDATE) LIKE '%YUTIKA%';
+
+/*QUERY 23*/
+SELECT
+  GENDER,
+  COUNT(*)
+FROM EMPLOYEE
+WHERE BIRTHDATE BETWEEN '1960-12-31' AND '1980-01-05'
+GROUP BY GENDER;
+
+/*QUERY 24*/
+SELECT
+  user,
+  authentication_string
+FROM mysql.user
+WHERE user = 'root';
+
+/*QUERY 25*/
+SELECT FIRSTNAME
+FROM EMPLOYEE
+WHERE FIRSTNAME LIKE '% % %';
+/*QUERY 26*/
+SELECT *
+FROM EMPLOYEE
+WHERE FIRSTNAME LIKE '___N';
+
+/*QUERY 27*/
+SELECT *
+FROM EMPLOYEE
+WHERE MONTH(BIRTHDATE) = 03;
+
+/*QUERY 28*/
+SELECT DATE(NOW());
+
+/*QUERY 29*/
+SELECT A.*
+FROM (SELECT *
+      FROM EMPLOYEE
+      WHERE GENDER = 'F') A
+  JOIN (SELECT *
+        FROM EMPLOYEE
+        WHERE EMPLOYEE.SALARY > 40000) B ON A.SSN = B.SSN;
+
+/*QUERY 30*/
+SELECT FIRSTNAME
+FROM EMPLOYEE
+WHERE LASTNAME LIKE '%*%';
+
+/*QUERY 31*/
+SELECT REPLACE(ADDRESS, '', ' ')
+FROM EMPLOYEE;
+
+/*QUERY 32*/
+SELECT
+  YEAR(BIRTHDATE),
+  MONTH(BIRTHDATE),
+  COUNT(*)
+FROM EMPLOYEE
+GROUP BY YEAR(BIRTHDATE), MONTH(BIRTHDATE);
+
+/*QUERY 33*/
+SELECT
+  SUBSTR(DEPT_NAME, 3, 6),
+  SUBSTR(DEPT_NAME FROM 3 FOR 6)
+FROM DEPARTMENT;
+
+/*QUERY 34*/
+SELECT LOWER(FIRSTNAME), LCASE(FIRSTNAME),UCASE(FIRSTNAME),UPPER(FIRSTNAME) FROM EMPLOYEE;
+UPDATE Employee
+SET FIRSTNAME = LOWER(FIRSTNAME);
+
+UPDATE EMPLOYEE
+SET FIRSTNAME = UPPER(FIRSTNAME);
+
+UPDATE EMPLOYEE
+SET FIRSTNAME = LCASE(FIRSTNAME);
+
+UPDATE EMPLOYEE
+SET FIRSTNAME = UCASE(FIRSTNAME);
+
+/*QUERY 35*/
+SELECT *
+FROM DEPARTMENT
+LIMIT 2;
+
+/*QUERY 36*/
+SELECT *
+FROM EMPLOYEE
+LIMIT 3 OFFSET 6;
+
+/*QUERY 37*/
+SELECT *
+FROM EMPLOYEE
+WHERE ASCII(LOWER(FIRSTNAME)) = ASCII(UPPER(FIRSTNAME));
+
+/*QUERY 38*/(SELECT
+   "FIRSTNAME",
+   GROUP_CONCAT(FIRSTNAME SEPARATOR ', ')
+ FROM EMPLOYEE)
+UNION (SELECT
+         "LASTNAME",
+            GROUP_CONCAT(LASTNAME SEPARATOR ', ')
+               FROM EMPLOYEE);
+
+/*QUERY 39*/
+CREATE TABLE Emptem LIKE EMPLOYEE;
+    SELECT *
+        FROM Emptem;
+/*QUERY 40*/
+INSERT INTO
+Emptem VALUES
+  (123456789,'John','B','Smith','M',30000,333445555,'15','731 Fondren, TX',2,'1965-01-09'),
+  (333445555,'Franklin','T','Wong','M',40000,888665555,'15','638 Voss, TX',3,'1955-12-08'),
+  (453453453,'Joyce','A','English','F',25000,333445555,'15','5631 Rice, TX',4,'1972-07-31');
+# Using UNION
+(SELECT *
+ FROM Emptem) UNION (SELECT *
+                        FROM EMPLOYEE);
+
+/*QUERY 41*/
+SELECT Emptem.*
+  FROM Emptem JOIN EMPLOYEE
+    WHERE Emptem.SSN=EMPLOYEE.SSN;
+
+/*QUERY 42*/
+SELECT *
+  FROM EMPLOYEE
+    WHERE NOT EXISTS(SELECT *
+                        FROM Emptem
+                            WHERE Emptem.SSN = EMPLOYEE.SSN);
+/*QUERY 43*/
+SELECT DATABASE();
+
+/*QUERY 44*/
+SELECT CURRENT_USER;
+
+/*QUERY 45*/
+SELECT
+  SUBSTR(VERSION(), LOCATE('-', VERSION()) + 2)    AS "OS",
+  SUBSTR(VERSION(), 1, LOCATE('-', VERSION()) - 1) AS "Mysql Server Version";
+
+/*QUERY 46*/
+SET @a=2,@b=3;
+SELECT (@a | @b) AS "BITWISE OR (a,b)",
+       (@a & @b) AS "BITWISE AND (a,b)",
+       (@a ^ @b) AS "BITWISE XOR (a,b)";
+
+/*QUERY 47*/
+SELECT *
+FROM EMPLOYEE
+WHERE CONCAT(SSN,FIRSTNAME, MIDDLENAME, LASTNAME,GENDER,SALARY,MOBILE_NO,DEPT_NO, ADDRESS,SUPERSSN,BIRTHDATE) REGEXP 'CHENNAI|castle';
+
+/*QUERY 48*/
+SELECT
+  FIRSTNAME,
+  LASTNAME,
+  DATEDIFF(CURRENT_DATE,BIRTHDATE) AS "AGE IN DAYS"
+FROM EMPLOYEE;
+
+/*QUERY 49*/
+SELECT CURRENT_DATE + INTERVAL 1 DAY;
+
+/*QUERY 50*/
+SELECT CURRENT_TIMESTAMP + INTERVAL 2 HOUR + INTERVAL 5000 MINUTE;
+
+/*QUERY 51*/
+SET @flop1=3.2554;
+SELECT
+  @flop1,
+  ABS(-33),
+  FLOOR(@flop1),
+  CEIL(@flop1),
+  ROUND(@flop1,2),
+  ROUND(POWER(@flop1,2),4),
+  LOG10(@flop1),
+  LOG2(@flop1),
+  LOG(2,@flop1),
+  MOD(FLOOR(@flop1),CEIL(@flop1)),
+  TRUNCATE(@flop1,2);
+
+/*QUERY 52*/
+# a) Beginning of the string.
+SELECT *
+FROM EMPLOYEE
+WHERE FIRSTNAME REGEXP '^[a-f]';
+
+# b) Match any character (including carriage return and newline).
+SELECT *
+FROM EMPLOYEE
+WHERE ADDRESS REGEXP '^.*$';
+
+# c) Match the end of a string.
+SELECT *
+FROM EMPLOYEE
+WHERE FIRSTNAME REGEXP '[a-f]$';
+
+# d) Any sequence of zero or more 'a' characters.
+SELECT *
+FROM EMPLOYEE
+WHERE FIRSTNAME REGEXP 'a*';
+
+# e) Either of the sequences xy or abc.
+SELECT *
+FROM EMPLOYEE
+WHERE FIRSTNAME REGEXP 'ahm|fra|ali';
+
+/*QUERY 53*/
+SELECT IF('test' LIKE 'test1', 'YES', 'NO') STRING_COMPARE;
+
+/*QUERY 54*/
+SET @mark=65;
+SELECT IF(@mark > 90, 'A',
+           IF(@mark > 80,'B',
+             IF(@mark > 70, 'C',
+                IF(@mark > 60, 'D',
+                   IF(@mark > 50,'E',
+                      IF(@mark > 40,'F', 'U')))))) AS GRADE;
+# CASE WHEN THEN ELSE
+SET @mark=65;
+SELECT
+  @mark        AS MARK,
+  CASE WHEN @mark > 90
+    THEN 'A'
+  WHEN @mark > 80
+    THEN 'B'
+  WHEN @mark > 70
+    THEN 'C'
+  WHEN @mark > 60
+    THEN 'D'
+  WHEN @mark > 50
+    THEN 'E'
+  WHEN @mark > 40
+    THEN 'F'
+  ELSE 'U' END AS GRADE;
+
+/*QUERY 55*/
+SELECT IFNULL(1/0,'YES');
+
+/*QUERY 56*/
+GRANT ALL PRIVILEGES ON COMPANY.* TO root@localhost
+IDENTIFIED BY 'qaz';
+
+
