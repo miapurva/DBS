@@ -1,0 +1,140 @@
+<html>
+<head>
+
+		<meta name="theme-color" content="#05668D">
+
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+
+		<title>Railway Luggage System</title>
+
+
+		<link rel="stylesheet" type="text/css" href="resources/main.css">
+
+</head>
+
+<body>
+	
+	<nav >
+		
+		<nav-left>
+		<a href="/"><nav-element>Railway Luggage System</nav-element></a>
+		</nav-left>
+
+		<nav-right>
+		<a href="#" id="login"><nav-element>New Entry</nav-element></a>
+		<a href="#" id="signup"><nav-element>Search</nav-element></a>
+		</nav-right>
+	</nav>
+
+	
+
+	<box2 ng-app="main">
+
+		<heading>
+			New Entry
+		</heading>
+		<br><br>
+		<form action="/login" method="POST">
+		<para>	
+			<input type="text" name="firstname" required>
+			<label>First Name</label>
+
+		</para>
+		<para>	
+			<input type="text" name="firstname" required>
+			<label>Last Name</label>
+
+		</para>
+		<para>	
+			<input type="text" name="firstname" required>
+			<label>Mobile No.</label>
+
+		</para>
+		<para>	
+			<input type="text" name="firstname" required>
+			<label>PNR No.</label>
+
+		</para>
+		<para>	
+			<input type="text" name="firstname" required>
+			<label>Train No.</label>
+
+		</para>
+		<para>	
+			<input type="text" name="firstname" required>
+			<label>Departure Station</label>
+
+		</para>
+		<para>	
+			<input type="text" name="firstname" required>
+			<label>Arrival Station</label>
+
+		</para>
+		<para>	
+			<input type="text" name="firstname" required>
+			<label>Platform No.</label>
+
+		</para>
+		<button type="submit" class="proceed">Create Entry</button>
+		</form>
+	</box2>
+	<box3>
+
+		<heading>
+			Search
+		</heading>
+		<br><br>
+		<form action="/signup" method="POST">
+		<para>
+
+			<input type="text" name="name" required> 
+			<label>Search value: </label>
+		</para>
+		
+		<para>	
+			<br><br>
+			Search in: 
+			<select name="usertype">
+				<option value="1" >First Name</option>
+				<option value="2" > Last Name </option>
+				<option value="2" > PNR No. </option>
+				<option value="2" > Mobile No. </option>
+				<option value="2" > Train No. </option>
+				<option value="2" > Departure Station </option>
+				<option value="2" > Arrival Station </option>
+				<option value="2" > Platform No. </option>
+
+			</select>
+			<br><br><br>
+				<button class="proceed">Proceed</button>
+		</para>
+
+		</form>
+	</box3>
+	<script src="resources/jquery.min.js"></script>
+	<script>
+
+	$(document).ready(function(){
+
+		$("#login").addClass("active");
+		
+    	$("#login").click(function(){
+        	$("box2").show();
+        	$("box3").hide();
+        	$(this).addClass("active");
+        	$("#signup").removeClass("active");
+        	
+    	});
+    	$("#signup").click(function(){
+        	$("box3").show();
+        	$("box2").hide();
+        	$(this).addClass("active");
+        	$("#login").removeClass("active");
+
+    	});
+	});
+	</script>
+	</body>
+
+
+</html>
